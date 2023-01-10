@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Cours;
 use App\Http\Requests\StoreCoursRequest;
 use App\Http\Requests\UpdateCoursRequest;
-
+use Illuminate\Http\Request;
 class CoursController extends Controller
 {
     /**
@@ -15,7 +15,7 @@ class CoursController extends Controller
      */
     public function index()
     {
-        //
+        return view('cours.index',['cours'=>Cours::all()]);
     }
 
     /**
@@ -25,7 +25,7 @@ class CoursController extends Controller
      */
     public function create()
     {
-        //
+        return view('cours.create');
     }
 
     /**
@@ -34,9 +34,20 @@ class CoursController extends Controller
      * @param  \App\Http\Requests\StoreCoursRequest  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(StoreCoursRequest $request)
+    public function store(Request $request)
     {
-        //
+        $validated = $request->validate([
+            'titre' => 'required|unique:posts|max:255',
+            'contenu' => 'required',
+        ]);
+        $file = $request->file('image');
+        $cours=new Cours();
+        $cours->titre=$request->titre;
+        $cours->contenu=$request->contenu;
+        if($cours->save())
+        {
+            echo "<div class='alert alert-success'>Enregisté avec succès !</div>";
+        }
     }
 
     /**
@@ -45,9 +56,15 @@ class CoursController extends Controller
      * @param  \App\Models\Cours  $cours
      * @return \Illuminate\Http\Response
      */
-    public function show(Cours $cours)
+    public function show(Request $request)
     {
-        //
+        $cours=Cours::find($id)->get();
+        return view('cours.show');
+    }
+    public function voir(Request $request)
+    {
+        $cours=Cours::find($id)->get();
+        return view('cours.show');
     }
 
     /**
@@ -70,7 +87,7 @@ class CoursController extends Controller
      */
     public function update(UpdateCoursRequest $request, Cours $cours)
     {
-        //
+        //s
     }
 
     /**

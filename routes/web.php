@@ -4,6 +4,8 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Resources\ProduitResource;
 use App\Models\Produit;
 use  App\Http\Controllers\ProduitController;
+use  App\Http\Controllers\HomeController;
+use  App\Http\Controllers\CoursController;
 use  App\Http\Controllers\AdminController;
 use  App\Http\Controllers\IknaMessageController;
 use App\Http\Requests;
@@ -23,8 +25,7 @@ Route::get('/', function () {
 */
 
 
-Route::get('/', [AdminController::class, 'indexMessage']);
-Route::get('/:id', [AdminController::class, 'indexMessage']);
+
 
 Route::middleware(['cors'])->group(function () {
     Route::apiResource('produits',ProduitController::class);
@@ -36,3 +37,19 @@ Route::middleware(['cors'])->group(function () {
 Route::get('/chat', function () {
     return view('chat');
 });
+
+Route::middleware(['auth'])->group(function () {
+   // Route::get('/', [AdminController::class, 'indexMessage']);
+    Route::get('/', [HomeController::class, 'index']);
+    Route::get('/:id', [AdminController::class, 'indexMessage']);
+    Route::get('/cours', [CoursController::class, 'index']);
+    Route::get('cours/:id', [CoursController::class, 'show']);
+    Route::get('/cours/create', [CoursController::class, 'create']);
+    Route::post('/cours/create', [CoursController::class, 'store']);
+
+});
+
+Auth::routes();
+
+
+
