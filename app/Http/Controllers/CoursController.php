@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Cours;
+use App\Models\LigneCours;
 use App\Http\Requests\StoreCoursRequest;
 use App\Http\Requests\UpdateCoursRequest;
 use Illuminate\Http\Request;
@@ -25,6 +26,7 @@ class CoursController extends Controller
      */
     public function create()
     {
+      
         return view('cours.create');
     }
 
@@ -36,18 +38,23 @@ class CoursController extends Controller
      */
     public function store(Request $request)
     {
-        $validated = $request->validate([
-            'titre' => 'required|unique:posts|max:255',
-            'contenu' => 'required',
+        $validatedData = $request->validate([
+            'titre' => 'required|max:255',
         ]);
-        $file = $request->file('image');
-        $cours=new Cours();
-        $cours->titre=$request->titre;
-        $cours->contenu=$request->contenu;
-        if($cours->save())
-        {
-            echo "<div class='alert alert-success'>Enregisté avec succès !</div>";
+        $path="";
+        if($request->file('image')!=null){
+            $file = $request->file('image');
+            $path = $file->store('image','public');
+            $path=explode("/",$path);
+            $path=$path[1];
         }
+        $cours=new Cours;
+        $cours->titre=$request->titre;
+        $cours->logo=$path;
+        $cours->description=$request->description;
+        $cours->save();
+    
+        return redirect()->route('voir_cours',$cours->id)->with('success', 'Cours créé avec succès');
     }
 
     /**
@@ -58,24 +65,21 @@ class CoursController extends Controller
      */
     public function show(Request $request)
     {
-        $cours=Cours::find($id)->get();
-        return view('cours.show');
+        $cours=Cours::where('id','=',$request->id)->get();
+        $ligneCours=LigneCours::where('cours_id','=',$request->id)->get();
+        return view('cours.show',['cours'=>$cours,'lignecours'=>$ligneCours]);
+        
     }
-    public function voir(Request $request)
-    {
-        $cours=Cours::find($id)->get();
-        return view('cours.show');
-    }
-
+  
     /**
      * Show the form for editing the specified resource.
      *
      * @param  \App\Models\Cours  $cours
      * @return \Illuminate\Http\Response
      */
-    public function edit(Cours $cours)
+    public function edit(Request $request)
     {
-        //
+        return view('cours.edit',['cours'=>Cours::where('id','=',$request->id)->get()]);
     }
 
     /**
@@ -85,9 +89,24 @@ class CoursController extends Controller
      * @param  \App\Models\Cours  $cours
      * @return \Illuminate\Http\Response
      */
-    public function update(UpdateCoursRequest $request, Cours $cours)
+    public function update(Request $request)
     {
-        //s
+        $validatedData = $request->validate([
+            'titre' => 'required|max:255',
+        ]);
+        $path="";
+        if($request->file('image')!=null){
+            $file = $request->file('image');
+            $path = $file->store('image','public');
+            $path=explode("/",$path);
+            $path=$path[1];
+        }
+       $cours=Cours::where('id','=',$request->id)->update([
+            'titre'=>$request->titre,
+            'logo'=>$path,
+            'description'=>$request->description
+        ]);
+        return redirect()->route('voir_cours',$request->id)->with('success', 'Cours modifié avec succès');
     }
 
     /**

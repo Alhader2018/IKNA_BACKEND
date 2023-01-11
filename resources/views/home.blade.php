@@ -27,7 +27,8 @@
                         d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z">
                     </path>
                     </svg></h4>
-                    <i class="fa-solid fa-book-open-cover"></i>
+                    <span class="hind-font caption-12 c-dashboardInfo__count">{{$stat['message']}}</span>
+                    
                 </div>
             </div>
             
@@ -35,8 +36,7 @@
                 <div class="wrap">
                 <a href="/cours" style="text-decoration:none">
                 <i class="fa fa-graduation-cap" style="font-size:48px;color:#6c25be;"></i>
-                <h4 class="heading heading5 hind-font medium-font-weight c-dashboardInfo__title">Cours</h4><span class="hind-font caption-12 c-dashboardInfo__count">€500</span><span
-                    class="hind-font caption-12 c-dashboardInfo__subInfo">Last month: €30</span>
+                <h4 class="heading heading5 hind-font medium-font-weight c-dashboardInfo__title">Cours</h4><span class="hind-font caption-12 c-dashboardInfo__count">{{$stat['cours']}}</span>
                     </a>
                 </div>
             </div>
@@ -45,9 +45,9 @@
             <div class="c-dashboardInfo col-lg-3 col-md-6">
                 <div class="wrap">
                 <i class="fa fa-envelope-open" style="font-size:48px;color:yellowgreen;"></i>
-                <h4 class="heading heading5 hind-font medium-font-weight c-dashboardInfo__title">Suggestions
+                <h4 class="heading heading5 hind-font medium-font-weight c-dashboardInfo__title">Utilisateurs
 
-                </h4><span class="hind-font caption-12 c-dashboardInfo__count">€5000</span>
+                </h4><span class="hind-font caption-12 c-dashboardInfo__count">{{$stat['user']}}</span>
                   
                 </div>
             </div>
@@ -58,7 +58,7 @@
                     Conseils pratiques
                     <br>
                  
-                </h4><span class="hind-font caption-12 c-dashboardInfo__count">6,40%</span>
+                </h4><span class="hind-font caption-12 c-dashboardInfo__count"></span>
                 </div>
             </div>
             </div>

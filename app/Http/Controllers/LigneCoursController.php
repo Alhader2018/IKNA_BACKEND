@@ -1,10 +1,8 @@
 <?php
 
 namespace App\Http\Controllers;
-
 use App\Models\LigneCours;
-use App\Http\Requests\StoreLigneCoursRequest;
-use App\Http\Requests\UpdateLigneCoursRequest;
+use Illuminate\Http\Request;
 
 class LigneCoursController extends Controller
 {
@@ -15,7 +13,7 @@ class LigneCoursController extends Controller
      */
     public function index()
     {
-        //
+        
     }
 
     /**
@@ -23,29 +21,47 @@ class LigneCoursController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create(Request $request)
     {
-        //
+        $cours_id=$request->cours_id;
+        return view('lignecours.create',['cours_id'=>$cours_id]);
     }
 
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \App\Http\Requests\StoreLigneCoursRequest  $request
+     * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(StoreLigneCoursRequest $request)
+    public function store(Request $request)
     {
-        //
+        $validatedData = $request->validate([
+            'titre' => 'required|max:255',
+        ]);
+        $path="";
+        if($request->file('image')!=null){
+            $file = $request->file('image');
+            $path = $file->store('image','public');
+            $path=explode("/",$path);
+            $path=$path[1];
+        }
+        $cours=new LigneCours;
+        $cours->titre=$request->titre;
+        $cours->cours_id=$request->cours_id;
+        $cours->logo=$path;
+        $cours->description=$request->description;
+        $cours->save();
+    
+        return redirect()->route('voir_cours',$request->cours_id)->with('success', 'Cours créé avec succès');
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\LigneCours  $ligneCours
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show(LigneCours $ligneCours)
+    public function show($id)
     {
         //
     }
@@ -53,33 +69,48 @@ class LigneCoursController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\LigneCours  $ligneCours
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit(LigneCours $ligneCours)
+    public function edit(Request $request)
     {
-        //
+        return view('lignecours.edit',['lignecours'=>LigneCours::where('id','=',$request->id)->get()]);
     }
 
     /**
      * Update the specified resource in storage.
      *
-     * @param  \App\Http\Requests\UpdateLigneCoursRequest  $request
-     * @param  \App\Models\LigneCours  $ligneCours
+     * @param  \Illuminate\Http\Request  $request
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(UpdateLigneCoursRequest $request, LigneCours $ligneCours)
+    public function update(Request $request)
     {
-        //
+        $validatedData = $request->validate([
+            'titre' => 'required|max:255',
+        ]);
+        $path="";
+        if($request->file('image')!=null){
+            $file = $request->file('image');
+            $path = $file->store('image','public');
+            $path=explode("/",$path);
+            $path=$path[1];
+        }
+       $cours=LigneCours::where('id','=',$request->id)->update([
+            'titre'=>$request->titre,
+            'logo'=>$path,
+            'description'=>$request->description
+        ]);
+        return redirect()->route('voir_cours',$request->cours_id)->with('success', 'Cours modifié avec succès');
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\LigneCours  $ligneCours
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy(LigneCours $ligneCours)
+    public function destroy($id)
     {
         //
     }

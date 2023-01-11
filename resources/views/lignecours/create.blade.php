@@ -4,7 +4,7 @@
 <div class="container">
     <div class="card">
         <div class="card-header">
-        <h4>Création Cours</h4>
+        <h4>Création Ligne Cours</h4>
         </div>
         <div class="card-body">
         @if ($errors->any())
@@ -16,15 +16,16 @@
                 </ul>
             </div>
         @endif
-        <form method="POST" action="{{route('store_cours')}}"  enctype="multipart/form-data">
+        <form method="POST" action="{{route('store_lignecours')}}"  enctype="multipart/form-data">
                         @csrf
+                        <input type="hidden" name="cours_id" value="{{@$cours_id}}">
         <div class="form-group">
             <label for="">Image mis en avant</label>
             <input type="file" name="image" id="" class="form-control">
         </div>
         <br>
         <div class="form-group">
-            <label for="">Intitulé du cours</label>
+            <label for="">Intitulé de la ligne</label>
             <input type="text" class="form-control" name="titre">
         </div>
         <br>

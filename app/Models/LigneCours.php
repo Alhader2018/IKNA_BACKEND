@@ -8,4 +8,8 @@ use Illuminate\Database\Eloquent\Model;
 class LigneCours extends Model
 {
     use HasFactory;
+    protected $table = 'lignecours';
+    protected $fillable = [
+      'created_at'
+  ];
 }

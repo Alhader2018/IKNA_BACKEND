@@ -8,7 +8,7 @@
         <h4>Cours</h4>
         </div>
         <div class="card-body">
-<a href="/cours/create" class="btn btn-primary btn-lg">Nouveau</a>  
+<a href="{{route('create_cours')}}" class="btn btn-primary btn-lg">Nouveau</a>  
 
 <table class="table">
   <thead class="thead-dark">
@@ -21,9 +21,9 @@
   <tbody>
   @foreach ($cours as $c)
     <tr>
-      <th scope="row">1</th>
+      <th scope="row">{{$c->id}}</th>
       <td>{{$c->titre}}</td>
-      <td><a href="/cours/{{$c->id}}" class="btn btn-primary">Voir</a> <a href="/cours/{{$c->id}}" class="btn btn-warning">Modifier </a></td>
+      <td><a href="{!! route('voir_cours', ['id' => $c->id]) !!}" class="btn btn-primary">Voir</a> <a href="{!! route('edit_cours', ['id' => $c->id]) !!}" class="btn btn-warning">Modifier </a></td>
     </tr>
 @endforeach
     

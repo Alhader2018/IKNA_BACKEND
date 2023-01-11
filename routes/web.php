@@ -6,6 +6,7 @@ use App\Models\Produit;
 use  App\Http\Controllers\ProduitController;
 use  App\Http\Controllers\HomeController;
 use  App\Http\Controllers\CoursController;
+use  App\Http\Controllers\LigneCoursController;
 use  App\Http\Controllers\AdminController;
 use  App\Http\Controllers\IknaMessageController;
 use App\Http\Requests;
@@ -41,11 +42,20 @@ Route::get('/chat', function () {
 Route::middleware(['auth'])->group(function () {
    // Route::get('/', [AdminController::class, 'indexMessage']);
     Route::get('/', [HomeController::class, 'index']);
+    Route::get('/home', [HomeController::class, 'index']);
     Route::get('/:id', [AdminController::class, 'indexMessage']);
-    Route::get('/cours', [CoursController::class, 'index']);
-    Route::get('cours/:id', [CoursController::class, 'show']);
-    Route::get('/cours/create', [CoursController::class, 'create']);
-    Route::post('/cours/create', [CoursController::class, 'store']);
+    Route::get('/cours', [CoursController::class, 'index'])->name('index_cours');
+    Route::get('/cours/voir/{id}', [CoursController::class, 'show'])->name('voir_cours');
+    Route::get('/cours/create/', [CoursController::class, 'create'])->name('create_cours');
+    Route::post('/cours/create/', [CoursController::class, 'store'])->name('store_cours');
+    Route::get('/cours/edit/{id}', [CoursController::class, 'edit'])->name('edit_cours');
+    Route::post('/cours/update/', [CoursController::class, 'update'])->name('update_cours');
+    // Ligne Cours
+    Route::get('/lignecours/create/{cours_id}', [LigneCoursController::class, 'create'])->name('create_lignecours');
+    Route::post('/lignecours/create/', [LigneCoursController::class, 'store'])->name('store_lignecours');
+    Route::get('/lignecours/edit/{id}', [LigneCoursController::class, 'edit'])->name('edit_lignecours');
+    Route::post('/lignecours/update/', [LigneCoursController::class, 'update'])->name('update_lignecours');
+
 
 });
 
