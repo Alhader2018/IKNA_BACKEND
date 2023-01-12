@@ -14,8 +14,11 @@ class CoursController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+    
     public function index()
     {
+      
+
         return view('cours.index',['cours'=>Cours::all()]);
     }
 
@@ -115,8 +118,22 @@ class CoursController extends Controller
      * @param  \App\Models\Cours  $cours
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Cours $cours)
+    public function destroy(Request $request)
     {
-        //
+        $id=explode('-',$request->id);
+        switch ($id[0]) {
+            case 'Cours':
+                Cours::where('id','=',$request->cours_id)->delete();
+                LigneCours::where("cours_id","=",$request->cours_id)->delete();
+                return redirect()->route('index_cours',$request->cours_id)->with('success', 'Cours supprimé avec succès');
+                break;
+            
+            case 'LigneCours':
+                LigneCours::where("id","=",$id[1])->delete();
+                return redirect()->route('voir_cours',$request->cours_id)->with('success', 'Ligne Cours supprimé avec succès');
+                break;
+        }
+        return $id[0];
+
     }
 }

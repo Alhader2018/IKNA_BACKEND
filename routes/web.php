@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Resources\ProduitResource;
 use App\Models\Produit;
 use  App\Http\Controllers\ProduitController;
+use  App\Http\Controllers\UtilisateurController;
 use  App\Http\Controllers\HomeController;
 use  App\Http\Controllers\CoursController;
 use  App\Http\Controllers\LigneCoursController;
@@ -55,6 +56,11 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/lignecours/create/', [LigneCoursController::class, 'store'])->name('store_lignecours');
     Route::get('/lignecours/edit/{id}', [LigneCoursController::class, 'edit'])->name('edit_lignecours');
     Route::post('/lignecours/update/', [LigneCoursController::class, 'update'])->name('update_lignecours');
+    Route::post('/lignecours/delete/', [CoursController::class, 'destroy'])->name('destroy_cours');
+    // Utilisateur
+    Route::get('/utilisateur', [UtilisateurController::class, 'index'])->name('index_utilisateur');
+    Route::get('/utilisateur/edit/{id}', [UtilisateurController::class, 'edit'])->name('edit_utilisateur');
+    Route::post('/utilisateur/edit/', [UtilisateurController::class, 'update'])->name('update_utilisateur');
 
 
 });
