@@ -15,6 +15,7 @@
             <div class="row align-items-stretch">
             <div class="c-dashboardInfo col-lg-3 col-md-6">
                 <div class="wrap">
+                <a href="/message" style="text-decoration:none">
                 <i class="fa fa-envelope" style="font-size:48px;color:#2596be;"></i>
                 <h4 class="heading heading5 hind-font medium-font-weight c-dashboardInfo__title">Messages
                     <path fill="none" d="M0 0h24v24H0z"></path>
@@ -23,7 +24,7 @@
                     </path>
                     </svg></h4>
                     <span class="hind-font caption-12 c-dashboardInfo__count">{{$stat['message']}}</span>
-                    
+                </a>
                 </div>
             </div>
             
@@ -39,7 +40,7 @@
           
             <div class="c-dashboardInfo col-lg-3 col-md-6">
                 <div class="wrap">
-                <i class="fa fa-envelope-open" style="font-size:48px;color:yellowgreen;"></i>
+                <i class="fa fa-user" style="font-size:48px;color:yellowgreen;"></i>
                 <h4 class="heading heading5 hind-font medium-font-weight c-dashboardInfo__title">Utilisateurs
 
                 </h4><span class="hind-font caption-12 c-dashboardInfo__count">{{$stat['user']}}</span>
@@ -54,6 +55,16 @@
                     <br>
                  
                 </h4><span class="hind-font caption-12 c-dashboardInfo__count"></span>
+                </div>
+            </div>
+            <div class="c-dashboardInfo col-lg-3 col-md-6">
+                <div class="wrap">
+                <i class="fa fa-user" style="font-size:48px;color:red;"></i>
+                <h4 class="heading heading5 hind-font medium-font-weight c-dashboardInfo__title">
+                    Utilisateurs IKNA
+                    <br>
+                 
+                </h4><span class="hind-font caption-12 c-dashboardInfo__count">{{$stat['profil']}}</span>
                 </div>
             </div>
             </div>

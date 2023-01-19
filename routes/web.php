@@ -3,6 +3,8 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Resources\ProduitResource;
 use App\Models\Produit;
+use App\Models\Cours;
+use App\Models\IknaMessage;
 use  App\Http\Controllers\ProduitController;
 use  App\Http\Controllers\UtilisateurController;
 use  App\Http\Controllers\HomeController;
@@ -11,6 +13,7 @@ use  App\Http\Controllers\LigneCoursController;
 use  App\Http\Controllers\AdminController;
 use  App\Http\Controllers\IknaMessageController;
 use App\Http\Requests;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -36,9 +39,6 @@ Route::middleware(['cors'])->group(function () {
 });
 
 
-Route::get('/chat', function () {
-    return view('chat');
-});
 
 Route::middleware(['auth'])->group(function () {
    // Route::get('/', [AdminController::class, 'indexMessage']);
@@ -61,7 +61,15 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/utilisateur', [UtilisateurController::class, 'index'])->name('index_utilisateur');
     Route::get('/utilisateur/edit/{id}', [UtilisateurController::class, 'edit'])->name('edit_utilisateur');
     Route::post('/utilisateur/edit/', [UtilisateurController::class, 'update'])->name('update_utilisateur');
-
+    //Message
+    Route::get('message', [IknaMessageController::class, 'show']);
+    Route::get('chat/{id}', [IknaMessageController::class, 'chat']);
+    Route::get('/gmail', function () {
+        return Socialite::driver('google')->redirect();
+    });
+    Route::get('/callback', function (Request $request) {
+        $user = Socialite::driver('google')->user();
+    });
 
 });
 

@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
-
+use Kreait\Firebase\Contract\Firestore;
 use App\Models\Cours;
 use App\Models\LigneCours;
 use App\Http\Requests\StoreCoursRequest;
@@ -14,11 +14,9 @@ class CoursController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    
+   
     public function index()
     {
-      
-
         return view('cours.index',['cours'=>Cours::all()]);
     }
 

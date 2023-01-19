@@ -7,6 +7,7 @@ use App\Models\IknaMessage;
 use App\Http\Requests\StoreIknaMessageRequest;
 use App\Http\Requests\UpdateIknaMessageRequest;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Storage;
 class IknaMessageController extends Controller
 {
     /**
@@ -14,6 +15,75 @@ class IknaMessageController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+    public function chat(Request $request){
+        $message=Iknamessage::where("id_expeditaire","=",$request->id)
+        ->orWhere("id_destinateur","=",$request->id)
+        ->orderBy('id', 'asc')
+        ->get();
+    
+        $content="";
+    
+            foreach($message as $m){
+                if($m->id_expeditaire=="medecin"  && $m->type_message=="text")
+                {
+                    $content.="
+                    <div class='incoming_msg'>
+                      <div class='incoming_msg_img'> <img src='https://ptetutorials.com/images/user-profile.png' alt='sunil'> </div>
+                      <div class='received_msg'>
+                        <div class='received_withd_msg'>
+                          <p>$m->contenu</p>
+                          <span class='time_date'> $m->created_at</span>
+                        
+                        </div>
+                      </div>
+                    </div>";
+                }
+                if($m->id_expeditaire=="medecin"  && $m->type_message=="audio")
+                {
+                    $content.="
+                    <div class='incoming_msg'>
+                      <div class='incoming_msg_img'> <img src='https://ptetutorials.com/images/user-profile.png' alt='sunil'> </div>
+                      <div class='received_msg'>
+                        <div class='received_withd_msg'>
+                          <p>$m->contenu</p>
+                          <span class='time_date'> $m->created_at</span>
+                          <audio controls>
+                          <source src='http://localhost:8000/uploads/images/0Y2NiaoVgYKkvQI1uqHIAs7AKFpetdE5oy6FyOo4.wav' type='audio/wav'>
+                          Your browser does not support the audio element.
+                          </audio>
+                        </div>
+                      </div>
+                    </div>";
+                }
+                if($m->expeditaire<>"medecin" && $m->type_message=="audio")
+                {
+                   $content.=" <div class='outgoing_msg'>
+                   <div class='sent_msg'>
+                   <p>$m->contenu</p>
+                   <span class='time_date'> $m->created_at</span>
+                   
+                    <audio controls>
+                    <source src='http://localhost:8000/uploads/images/0Y2NiaoVgYKkvQI1uqHIAs7AKFpetdE5oy6FyOo4.wav' type='audio/wav'>
+                    Your browser does not support the audio element.
+                    </audio>
+                 </div>
+                 </div>";
+                }
+                if($m->expeditaire<>"medecin" && $m->type_message=="text")
+                {
+                   $content.=" <div class='outgoing_msg'>
+                   <div class='sent_msg'>
+                   <p>$m->contenu</p>
+                   <span class='time_date'> $m->created_at</span>
+                   
+                 </div>
+                 </div>";
+                }
+               
+            }
+       
+       return $content;
+    }
     public function index(Request $request)
     {
         if(isset($request->id))
@@ -63,17 +133,18 @@ class IknaMessageController extends Controller
         } else{
         */
             if($request->file('avatar')!=null){
-                $path = $request->file('avatar')->store('images');
-                $path=explode("/",$path);
+                $path = $request->file('avatar')->store('images', 'uploads');
+                $url=explode("/",$path);
             }
           
             
             $message=new IknaMessage();
             $message->type_message=$request->type_message;
             $message->contenu= $request->contenu;
-            if(isset($path)){$message->logo= $path[1];} 
+            if(isset($url)){$message->logo= $url[1];} 
             $message-> id_destinateur=$request->id_destinateur;
             $message-> id_expeditaire= $request->id_expeditaire;
+            $message->pseudo= $request->pseudo;
             $message->save();
            
             return new IknaMessageResssource($message);
@@ -91,7 +162,8 @@ class IknaMessageController extends Controller
      */
     public function show(IknaMessage $iknaMessage)
     {
-        //
+        $profil=IknaMessage::select('pseudo')->distinct()->get();
+        return view("messages.index",["profil"=>$profil]);
     }
 
     /**
