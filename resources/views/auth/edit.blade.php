@@ -42,9 +42,10 @@
                             <label for="role" class="col-md-4 col-form-label text-md-end">Rôle</label>
                             <div class="col-md-6">
                               <select name="role" id="" class="form-control">
-                                <option value="Admin">Administrateur</option>
-                                <option value="Médecin">Médecin</option>
-                                <option value="Conseillé">Conseillé Pratique</option>
+                                @foreach($groupe as $g)
+                                <option value="{{$g->code}}">{{$g->libellé}}</option>
+                                @endforeach
+                               
                               </select>
                             </div>
                         </div>

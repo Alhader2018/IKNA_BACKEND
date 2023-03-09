@@ -37,7 +37,8 @@
         <h4>Cours</h4>
         </div>
         <div class="card-body">
-       
+        <img src="{{$upload}}{{ $cours[0]->logo }}"  width="100" height="100">
+        <br>
    
         <dl class="row">
           <dt class="col-sm-3">Intitulé</dt>
@@ -69,6 +70,7 @@
       <th scope="col">#</th>
       <th scope="col">Titre</th>
       <th scope="col">Contenu</th>
+      <th scope="col">Image</th>
       <th scope="col">Action</th>
     </tr>
   </thead>
@@ -78,6 +80,7 @@
       <th scope="row">1</th>
       <td>{{$l->titre}}</td>
       <td>{{$l->description}}</td>
+      <td><img src="{{$upload}}{{ $l->logo }}"  width="100" height="100"></td>
       <td>
         <a href="{!! route('edit_lignecours', ['id' => $l->id]) !!}" class="btn btn-warning">Modifier </a> 
         <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#exampleModal" data-bs-whatever="LigneCours-{{$l->id}}">

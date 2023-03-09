@@ -5,9 +5,11 @@ use App\Models\Cours;
 use App\Models\ConseilPratique;
 use App\Models\Suggestion;
 use App\Models\User;
+use App\Models\Permission;
 use App\Models\Profil;
 use App\Models\IknaMessage;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class HomeController extends Controller
 {
@@ -34,6 +36,16 @@ class HomeController extends Controller
        // $stat['conseil']=ConseilPratique::all()->count();
         $stat['user']=User::all()->count();
         $stat['profil']=Profil::all()->count();
-        return view('home',['stat'=>$stat]);
+        $id = Auth::id();
+        $user=User::find($id);
+        $permission=Permission::where('groupe','=', $user->role)->get();
+        $permissions=[];
+       foreach ($permission as $p) {
+         if($p->permission=='true'){
+            $permissions[$p->pages]=$p->permission;
+         }
+       }
+
+        return view('home',["permissions"=>$permissions]);
     }
 }

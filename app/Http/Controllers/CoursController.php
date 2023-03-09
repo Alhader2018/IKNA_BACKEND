@@ -7,6 +7,7 @@ use App\Models\LigneCours;
 use App\Http\Requests\StoreCoursRequest;
 use App\Http\Requests\UpdateCoursRequest;
 use Illuminate\Http\Request;
+use App\Http\Resources\CoursResource;
 class CoursController extends Controller
 {
     /**
@@ -14,12 +15,22 @@ class CoursController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-   
+  
     public function index()
     {
-        return view('cours.index',['cours'=>Cours::all()]);
+        
+        return view('cours.index',['cours'=>Cours::all(),'upload'=>env('APP_UPLOAD')]);
     }
-
+    public function indexRessource()
+    {
+        $cours = Cours::all();
+        return CoursResource::collection($cours);
+    }
+    public function showRessource(Request $request)
+    {
+        $cours = Cours::where('id',$request->id)->get();
+        return CoursResource::collection($cours);
+    }
     /**
      * Show the form for creating a new resource.
      *
@@ -43,15 +54,13 @@ class CoursController extends Controller
             'titre' => 'required|max:255',
         ]);
         $path="";
-        if($request->file('image')!=null){
-            $file = $request->file('image');
-            $path = $file->store('image','public');
-            $path=explode("/",$path);
-            $path=$path[1];
-        }
+         if($request->file('image')!=null){
+                $path = $request->file('image')->store('images', 'uploads');
+                $url=explode("/",$path);
+            }
         $cours=new Cours;
         $cours->titre=$request->titre;
-        $cours->logo=$path;
+        if(isset($url)){$cours->logo= $url[1];} 
         $cours->description=$request->description;
         $cours->save();
     
@@ -68,9 +77,11 @@ class CoursController extends Controller
     {
         $cours=Cours::where('id','=',$request->id)->get();
         $ligneCours=LigneCours::where('cours_id','=',$request->id)->get();
-        return view('cours.show',['cours'=>$cours,'lignecours'=>$ligneCours]);
+        return view('cours.show',['cours'=>$cours,'lignecours'=>$ligneCours,'upload'=>env('APP_UPLOAD')]);
         
     }
+  
+  
   
     /**
      * Show the form for editing the specified resource.
@@ -80,7 +91,7 @@ class CoursController extends Controller
      */
     public function edit(Request $request)
     {
-        return view('cours.edit',['cours'=>Cours::where('id','=',$request->id)->get()]);
+        return view('cours.edit',['cours'=>Cours::where('id','=',$request->id)->get(),'upload'=>env('APP_UPLOADS')]);
     }
 
     /**
@@ -97,16 +108,24 @@ class CoursController extends Controller
         ]);
         $path="";
         if($request->file('image')!=null){
-            $file = $request->file('image');
-            $path = $file->store('image','public');
-            $path=explode("/",$path);
-            $path=$path[1];
+            $path = $request->file('image')->store('images', 'uploads');
+            $url=explode("/",$path);
         }
-       $cours=Cours::where('id','=',$request->id)->update([
-            'titre'=>$request->titre,
-            'logo'=>$path,
-            'description'=>$request->description
-        ]);
+        if(isset($url))
+        {
+            $cours=Cours::where('id','=',$request->id)->update([
+                'titre'=>$request->titre,
+                'logo'=>$url[1],
+                'description'=>$request->description
+            ]);
+        }
+        else
+        {
+            $cours=Cours::where('id','=',$request->id)->update([
+                'titre'=>$request->titre,
+                'description'=>$request->description
+            ]);
+        }
         return redirect()->route('voir_cours',$request->id)->with('success', 'Cours modifié avec succès');
     }
 
@@ -131,7 +150,7 @@ class CoursController extends Controller
                 return redirect()->route('voir_cours',$request->cours_id)->with('success', 'Ligne Cours supprimé avec succès');
                 break;
         }
-        return $id[0];
+       
 
     }
 }

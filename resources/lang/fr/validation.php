@@ -124,7 +124,7 @@ return [
      'starts_with' => 'Le :attribute doit commencer par l\'un des éléments suivants : :values.',
      'string' => 'Le :attribute doit être une chaîne.',
      'timezone' => 'L\' :attribut doit être un fuseau horaire valide.',
-     'unique' => 'L\':attribut a déjà été pris.',
+     'unique' => 'L\'attribut a déjà été pris.',
      'uploaded' => 'Le :attribut n\'a pas pu être téléchargé.',
      'url' => 'Le :attribute doit être une URL valide.',
      'uuid' => 'Le :attribute doit être un UUID valide.',

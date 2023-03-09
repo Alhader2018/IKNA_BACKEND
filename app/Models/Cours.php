@@ -12,4 +12,9 @@ class Cours extends Model
     protected $fillable = [
       'created_at'
   ];
+
+  public function ligneCours()
+    {
+        return $this->hasMany(LigneCours::class);
+    }
 }

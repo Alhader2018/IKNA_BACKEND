@@ -12,4 +12,8 @@ class LigneCours extends Model
     protected $fillable = [
       'created_at'
   ];
+  public function cours()
+    {
+        return $this->belongsTo(Cours::class);
+    }
 }

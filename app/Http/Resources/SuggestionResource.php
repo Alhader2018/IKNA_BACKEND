@@ -14,6 +14,10 @@ class SuggestionResource extends JsonResource
      */
     public function toArray($request)
     {
-        return parent::toArray($request);
+        return [
+            'id' => $this->id,
+            'auteur' => $this->auteur,
+            'contenu' => $this->contenu
+        ];
     }
 }

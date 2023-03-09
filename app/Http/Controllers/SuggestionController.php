@@ -1,11 +1,12 @@
 <?php
 
 namespace App\Http\Controllers;
-
+use Illuminate\Http\Request;
 use App\Models\Suggestion;
 use App\Http\Requests\StoreSuggestionRequest;
 use App\Http\Requests\UpdateSuggestionRequest;
 
+use App\Http\Resources\SuggestionResource;
 class SuggestionController extends Controller
 {
     /**
@@ -15,7 +16,7 @@ class SuggestionController extends Controller
      */
     public function index()
     {
-        //
+        return view('suggestions.index',['suggestions'=>Suggestion::all()]);
     }
 
     /**
@@ -34,9 +35,15 @@ class SuggestionController extends Controller
      * @param  \App\Http\Requests\StoreSuggestionRequest  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(StoreSuggestionRequest $request)
+    public function store(Request $request)
     {
-        //
+        $sugg = new Suggestion();
+        $sugg->auteur= $request->auteur;
+        $sugg->contenu=$request->contenu;
+        
+        $sugg->save();
+    
+        return new SuggestionResource($sugg);
     }
 
     /**

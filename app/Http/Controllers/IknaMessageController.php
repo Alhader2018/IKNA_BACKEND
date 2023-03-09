@@ -8,6 +8,8 @@ use App\Http\Requests\StoreIknaMessageRequest;
 use App\Http\Requests\UpdateIknaMessageRequest;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\DB;
+
 class IknaMessageController extends Controller
 {
     /**
@@ -38,7 +40,22 @@ class IknaMessageController extends Controller
                       </div>
                     </div>";
                 }
-                if($m->id_expeditaire=="medecin"  && $m->type_message=="audio")
+                if($m->expeditaire!="medecin" && $m->type_message=="audio")
+                {
+                    $content.=" <div class='outgoing_msg'>
+                    <div class='sent_msg'>
+                    <p>$m->contenu</p>
+                    <span class='time_date'> $m->created_at</span>
+                
+                    <audio controls>
+                    <source src='https://api.mconsulting.ml/laravel/public/uploads/images/".$m->logo."' type='audio/wav'>
+                    Votre navigateur ne supporte pas l'audio.
+                    </audio>
+                    </div>
+                    </div>";
+                }
+                
+                if($m->id_expeditaire=="medecin" && $m->type_message=="audio")
                 {
                     $content.="
                     <div class='incoming_msg'>
@@ -48,39 +65,42 @@ class IknaMessageController extends Controller
                           <p>$m->contenu</p>
                           <span class='time_date'> $m->created_at</span>
                           <audio controls>
-                          <source src='http://localhost:8000/uploads/images/0Y2NiaoVgYKkvQI1uqHIAs7AKFpetdE5oy6FyOo4.wav' type='audio/wav'>
-                          Your browser does not support the audio element.
+                          <source src='https://api.mconsulting.ml/laravel/public/uploads/images/".$m->logo."' type='audio/wav'>
+                          Votre navigateur ne supporte pas l'audio.
                           </audio>
                         </div>
                       </div>
                     </div>";
                 }
-                if($m->expeditaire<>"medecin" && $m->type_message=="audio")
+                
+                if($m->id_expeditaire=="medecin" && $m->type_message=="image")
+                {
+                    $content.="
+                    <div class='incoming_msg'>
+                      <div class='incoming_msg_img'> <img src='https://ptetutorials.com/images/user-profile.png' alt='sunil'> </div>
+                      <div class='received_msg'>
+                        <div class='received_withd_msg'>
+                          <p>$m->contenu</p>
+                          <span class='time_date'> $m->created_at</span>
+                          <img src='https://api.mconsulting.ml/laravel/public/uploads/images/".$m->logo."'>
+                        </div>
+                      </div>
+                    </div>";
+                }
+                
+                if($m->expeditaire!="medecin" && $m->type_message=="image")
                 {
                    $content.=" <div class='outgoing_msg'>
                    <div class='sent_msg'>
                    <p>$m->contenu</p>
                    <span class='time_date'> $m->created_at</span>
-                   
-                    <audio controls>
-                    <source src='http://localhost:8000/uploads/images/0Y2NiaoVgYKkvQI1uqHIAs7AKFpetdE5oy6FyOo4.wav' type='audio/wav'>
-                    Your browser does not support the audio element.
-                    </audio>
+                   <img src='https://api.mconsulting.ml/laravel/public/uploads/images/".$m->logo."'>
                  </div>
                  </div>";
                 }
-                if($m->expeditaire<>"medecin" && $m->type_message=="text")
-                {
-                   $content.=" <div class='outgoing_msg'>
-                   <div class='sent_msg'>
-                   <p>$m->contenu</p>
-                   <span class='time_date'> $m->created_at</span>
-                   
-                 </div>
-                 </div>";
-                }
-               
             }
+
+            
        
        return $content;
     }
@@ -98,6 +118,7 @@ class IknaMessageController extends Controller
         }
         
     }
+ 
 
     /**
      * Show the form for creating a new resource.
@@ -199,4 +220,27 @@ class IknaMessageController extends Controller
     {
         //
     }
+    public function user_ressource(){
+        $messages = IknaMessage::all();
+        $participants = [];
+    
+        foreach ($messages as $message) {
+            if ($message->id_expeditaire !== "medecin") {
+                $participants[] = $message->id_expeditaire;
+            }
+            if ($message->id_destinateur !== "medecin") {
+                $participants[] = $message->id_destinateur;
+            }
+        }
+    
+        $participants = array_unique($participants);
+        
+        // Convertir le tableau $participants en un tableau d'objets avec une clé `id`
+        $participants = array_map(function($participant) {
+            return ['id' => $participant];
+        }, $participants);
+    
+        return response()->json($participants);
+    }
+    
 }

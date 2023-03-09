@@ -39,16 +39,15 @@ class LigneCoursController extends Controller
             'titre' => 'required|max:255',
         ]);
         $path="";
-        if($request->file('image')!=null){
-            $file = $request->file('image');
-            $path = $file->store('image','public');
-            $path=explode("/",$path);
-            $path=$path[1];
-        }
+      $path="";
+         if($request->file('image')!=null){
+                $path = $request->file('image')->store('images', 'uploads');
+                $url=explode("/",$path);
+            }
         $cours=new LigneCours;
         $cours->titre=$request->titre;
         $cours->cours_id=$request->cours_id;
-        $cours->logo=$path;
+        if(isset($url)){$cours->logo= $url[1];} 
         $cours->description=$request->description;
         $cours->save();
     
@@ -91,16 +90,27 @@ class LigneCoursController extends Controller
         ]);
         $path="";
         if($request->file('image')!=null){
-            $file = $request->file('image');
-            $path = $file->store('image','public');
-            $path=explode("/",$path);
-            $path=$path[1];
+            $path = $request->file('image')->store('images', 'uploads');
+            $url=explode("/",$path);
         }
-       $cours=LigneCours::where('id','=',$request->id)->update([
-            'titre'=>$request->titre,
-            'logo'=>$path,
-            'description'=>$request->description
-        ]);
+        if(isset($url))
+        {
+            $cours=LigneCours::where('id','=',$request->id)->update([
+                'titre'=>$request->titre,
+                'logo'=>$url[1],
+                'description'=>$request->description
+            ]);
+
+        }
+        else
+        {
+
+            $cours=LigneCours::where('id','=',$request->id)->update([
+                'titre'=>$request->titre,
+                'description'=>$request->description
+            ]);
+        }
+       
         return redirect()->route('voir_cours',$request->cours_id)->with('success', 'Cours modifié avec succès');
     }
 

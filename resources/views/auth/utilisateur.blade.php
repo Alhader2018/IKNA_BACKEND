@@ -5,10 +5,10 @@
     <div class="card">
 
         <div class="card-header">
-        <h4>Cours</h4>
+        <h4>Utilisateurs</h4>
         </div>
         <div class="card-body">
-<a href="{{route('create_cours')}}" class="btn btn-primary btn-lg">Nouveau</a>  
+<a href="{{route('create_utilisateur')}}" class="btn btn-primary btn-lg">Nouveau</a>  
 
 <table class="table">
   <thead class="thead-dark">

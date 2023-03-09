@@ -202,7 +202,7 @@ formData.append("id_destinateur",1);
 formData.append("id_expeditaire",1);
 formData.append("pseudo","hassey");
 
-fetch("http://localhost:8000/iknamessage", {
+fetch("https://api.mconsulting.ml/iknamessage", {
   method: "POST",
   body: formData
 })

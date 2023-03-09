@@ -14,6 +14,11 @@ class VerifyCsrfToken extends Middleware
     protected $except = [
         '/produits',
         '/iknamessage',
+        '/permission',
+        '/users',
+        '/profils',
+        '/suggestions',
+        '/actualites_ressource'
 
     ];
 }

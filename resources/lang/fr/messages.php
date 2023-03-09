@@ -14,5 +14,10 @@ return [
     'You are logged in!'            => 'Vous êtes connectés',
     'Dashboard'                     => 'Tableau de bord',
     'Logout'                        => 'Deconnexion',
+    'Rapport'                       => 'Rapport',
+    'Users'                        =>  'Gestion des utilisateurs',
+    'Profil'                        =>  'Gestion des utilisateurs',
+    'Content'                       => 'Gestion des contenus',
+    'Message'                       => 'Messages',
     
 ];

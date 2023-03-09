@@ -8,4 +8,8 @@ use Illuminate\Database\Eloquent\Model;
 class Suggestion extends Model
 {
     use HasFactory;
+    protected $table = 'suggestions';
+    protected $fillable = [
+      'created_at'
+  ];
 }

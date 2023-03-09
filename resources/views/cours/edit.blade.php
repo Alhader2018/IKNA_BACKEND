@@ -20,7 +20,11 @@
                         @csrf
         <input type="hidden" value="{{$cours[0]->id}}" name="id">
         <div class="form-group">
-            <label for="">Image mis en avant</label>
+            <label for="photo"> Photo actuelle</label><br>
+            <img src="{{$upload}}{{ $cours[0]->logo }}" width="100" height="100">
+        </div>
+        <div class="form-group">
+            <label for="">Modifier Image mis en avant</label>
             <input type="file" name="image" id="" class="form-control">
         </div>
         <br>
